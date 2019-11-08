@@ -821,9 +821,17 @@ async function main() {
   {
     // Download the pig.raw file from the local server
     console.log(110, "Downloading 'pig.raw' from 'localhost'");
-    let response = await fetch('pig.raw');
-    if (!response.ok) {
+    let response;
+    try {
+      response = await fetch('pig.raw');
+    }
+    catch (error) {
       // Something went wrong, so we have to bail
+      postError("Error accessing volume 'pig.raw': " + error);
+      return;
+    }
+    if (!response.ok) {
+      // The fetch request didn't fail catastrophically, but it still didn't succeed
       postError("Error accessing volume 'pig.raw'");
       return;
     }
