@@ -237,6 +237,9 @@ const volumeRenderingFragmentSource = `#version 300 es
     // Actually compute tEnd
     float tEnd = length(rayDirection);
 
+    // Normalize the ray direction
+    rayDirection = normalize(rayDirection);
+
     // The user gave us a step size along the ray, so we are using it here.  Every step
     // along the ray, we are incrementing t by tIncr and have a look at the sample
     float tIncr = stepSize;
