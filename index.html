@@ -264,14 +264,6 @@ const volumeRenderingFragmentSource = `#version 300 es
       // access the pixel right in the center
       vec4 color = texture(transferFunction, vec2(value, 0.5));
 
-      // This line is a bit magic.  Basically, we want to prevent that the brightness of
-      // the resulting image that we generate depends on the stepSize the user chooses.
-      // Higher step size means more samples per pixel, so we need to reduce the impact
-      // of each sample to keep the overall pixel value roughly the same.  150 is a
-      // randomly chosen value to serve as a reference contribution
-      const float ReferenceSamplingInterval = 150.0;
-      color.a = 1.0 - pow(1.0 - color.a, tIncr * ReferenceSamplingInterval);
-
       // We only want to continue if the sample we are currently using actually has any
       // contribution.  If the alpha value is 0, it will not contribute anything, so skip
       if (color.a > 0.0) {
