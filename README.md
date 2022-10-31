@@ -1,4 +1,4 @@
-# TNM093 - 2020
+# TNM093
 This repository contains the material for the SciVis mini-project for the TNM093 course at [Linköping University](https://liu.se/). It requires a *WebGL 2.0* compliant browser (see [Can I use ... Support tables for HTML5, CSS3, etc](https://caniuse.com/#feat=webgl2)).
 The material is very loosely based on [Creating 3D objects using WebGL - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Creating_3D_objects_using_WebGL) and [WebGL2 Fundamentals](https://webgl2fundamentals.org).
 
