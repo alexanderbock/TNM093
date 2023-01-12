@@ -29,7 +29,7 @@ let TransferFunctionIsDirty = true;
 //
 // var vertexSource = `
 // #version 300 es
-// 
+//
 // would not work as there is a \n after `
 //
 
@@ -141,7 +141,7 @@ const boundingBoxFragmentSource = `#version 300 es
 // fragment shader.
 //
 // We are building a screen-aligned quad:
-// 
+//
   // 3--------------------------2
   // |                          |
   // |                          |
@@ -149,7 +149,7 @@ const boundingBoxFragmentSource = `#version 300 es
   // |                          |
   // |                          |
   // 0--------------------------1
-  // 
+  //
   //  y
   //  ^
   //  |
@@ -330,7 +330,7 @@ const volumeRenderingFragmentSource = `#version 300 es
     const int RenderTypeVolumeSlice = 5;
     const int RenderTypeVolumeSliceWithTransferFunction = 6;
 
-    // The values that are checked against here have to be synced with the renderVolume 
+    // The values that are checked against here have to be synced with the renderVolume
     if (renderType == RenderTypeVolumeRendering) {
       // Check for an early out. If the entry coordinate is the same as the exit
       // coordinate then our current pixel is missing the volume, so there is no need for
@@ -361,9 +361,20 @@ const volumeRenderingFragmentSource = `#version 300 es
       out_color = vec4(abs(exitCoord - entryCoord), 1.0);
     }
     else if (renderType == RenderTypeTransferFunction) {
-      // Just render the transfer function into the viewport
+      // Render the transfer function into the viewport
       vec4 c = texture(transferFunction, vec2(st));
-      out_color = vec4(c.rgb, 1.0);
+      // For the upper 80% of the viewport, just render the RGB color
+      if (st.y > 0.2) {
+        out_color = vec4(c.rgb, 1.0);
+        return;
+      }
+      // For the rest, render TF with transparency, over a checkerboard pattern
+      float nCheckers = 20.0;
+      vec2 pos = floor(st * nCheckers);
+      float patternMask = mod(pos.x + mod(pos.y, 2.0), 2.0);
+      vec4 checkerColor = patternMask * vec4(0.7, 0.7, 0.7, 1.0);
+      // Blend checkerboard pattern with TF color
+      out_color = (1.0 - c.a) * checkerColor + c.a * c;
     }
     else if (renderType == RenderTypeVolumeSlice) {
       // Take a central slice of the volume and render it to the screen. This is mainly
@@ -485,7 +496,7 @@ function updateTransferFunction(gl, transferFunction) {
   // For now, just create a linear ramp from 0 to 1. We start at the cutoff value and fill
   // the rest of the array
   for (let i = cutoff * 4; i < 256 * 4; i += 4) {
-    // convert i into a value [0, 256] and set it 
+    // convert i into a value [0, 256] and set it
     const it = i / 4;
     data[i] = 2 * it;
     data[i + 1] = it;
@@ -619,7 +630,7 @@ function renderVolume(gl, program, volumeTexture, entryTexture, exitTexture,
   // Bind the entry point texture
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, entryTexture);
-  
+
   gl.uniform1i(gl.getUniformLocation(program, "entryPoints"), 0);  // 0 == gl.TEXTURE0
 
   // Bind the exit point texture
@@ -762,7 +773,7 @@ async function main() {
   // We want to do linear interpolation with this texture
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
   // It shouldn't happen that we are accessing the texture outside the range, but these
-  // value need to be set in order to make OpenGL happy 
+  // value need to be set in order to make OpenGL happy
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
@@ -845,7 +856,7 @@ async function main() {
     // Convert it into an array buffer
     console.log(112, "Cast the blob into an array buffer");
     const data = await blob.arrayBuffer();
-    // From the available meta data for the pig.raw dataset I know that each voxel is 
+    // From the available meta data for the pig.raw dataset I know that each voxel is
     // 16 bit unsigned integer
     console.log(113, "Cast the array buffer into a Uint16 typed array");
     const typedData = new Uint16Array(data);
@@ -857,7 +868,7 @@ async function main() {
       // [0, 256) manually
       convertedData[i] = typedData[i] / 4096.0 * 256.0
     }
-    
+
 
     // The volume size also comes from the available meta data for the pig.raw
     // if you want to have a look at the metadata, the pig.dat contains that
