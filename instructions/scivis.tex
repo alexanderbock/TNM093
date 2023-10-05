@@ -36,7 +36,7 @@
 
 \title{TMN093 Mini-project --- Scientific Visualization}
 \author{Alexander Bock}
-\date{November 2020}
+\date{October 2023}
 
 \pagestyle{fancy}
 \fancyfoot[c]{}
@@ -83,11 +83,12 @@ Please note: If some time has passed between finishing the project and showing i
   \item Show that the maximum intensity projection compositing method works, show the implementation, and explain how this works
   \item Using the front-to-back compositing method, use your transfer function editor to interactively manipulate the transfer function to show the lab assisstant what is on the inside of the dataset.  Your editor must be capable of the following:
   \begin{todolist}
-    \item Have a single transfer function editor
     \item Change the transfer function without needing to reload the webpage
-    \item Have the ability to change the color and opacity mapping for volume samples
-    \item Be able to interact with the editor and change the transfer function settings with the mouse
-    \item Have the ability to simulate isosurface rendering by being able to create ``spiky'' transfer functions that have a high opacity only for a few values with different colors.
+    \item Have the ability to change the color and opacity mapping for volume samples, to any color
+    \item Be able to interact with the editor and change the transfer function settings using the mouse
+    \item Have the ability to simulate isosurface rendering by being able to create "spiky" transfer functions that have a high opacity only for a few values with different colors
+    \item Apply smooth (e.g. linear) transitions between opacity values
+    \item Be able to individually highlight at least three different materials in the volume, with different colors and opacity
   \end{todolist}
   \item Write a one-page summary documenting your findings while interacting with your transfer function widget, what you have learned from this lab, and what findings were unexpected.  Add the descriptions for the front-to-back, first hit-point, and maximum intensity projection composition methods.  Add a short reflection about the situations in which to prefer InfoVis and SciVis visualization methods. 
 \end{todolist}
